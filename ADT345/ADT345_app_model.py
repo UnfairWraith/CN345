@@ -6,9 +6,10 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
-
+from sklearn.metrics import confusion_matrix
+from sklearn import metrics
+import itertools
 
 
 
@@ -70,25 +71,34 @@ def plot_hist(hist):
     plt.legend(["train", "validation"], loc="upper left")
     plt.show()
     
-def plot_confusion_matrix(y_true,y_pred):
-    cm_array = confusion_matrix(y_true,y_pred)
-    true_labels = np.unique(y_true)
-    pred_labels = np.unique(y_pred)
-    plt.imshow(cm_array[:-1,:-1], interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title("Confusion matrix", fontsize=16)
-    cbar = plt.colorbar(fraction=0.046, pad=0.04)
-    cbar.set_label('Number of images', rotation=270, labelpad=30, fontsize=12)
-    xtick_marks = np.arange(len(true_labels))
-    ytick_marks = np.arange(len(pred_labels))
-    plt.xticks(xtick_marks, true_labels, rotation=90)
-    plt.yticks(ytick_marks,pred_labels)
-    plt.tight_layout()
-    plt.ylabel('True label', fontsize=14)
-    plt.xlabel('Predicted label', fontsize=14)
-    fig_size = plt.rcParams["figure.figsize"]
-    fig_size[0] = 12
-    fig_size[1] = 12
-    plt.rcParams["figure.figsize"] = fig_size    
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+ 
+#Add Normalization Option
+   if normalize:
+     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+     print("Normalized confusion matrix")
+   else:
+     print('Confusion matrix, without normalization')
+ 
+# print(cm)
+ 
+   plt.imshow(cm, interpolation='nearest', cmap=cmap)
+   plt.title(title)
+   plt.colorbar()
+   tick_marks = np.arange(len(classes))
+   plt.xticks(tick_marks, classes, rotation=45)
+   plt.yticks(tick_marks, classes)
+ 
+   fmt = '.2f' if normalize else 'd'
+   thresh = cm.max() / 2.
+   for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="white" if cm[i, j] > thresh else 'black')
+ 
+   plt.tight_layout()
+   plt.ylabel('True label')
+   plt.xlabel('Predicted label') 
+   plt.show()
+    
     
     
     
@@ -99,9 +109,9 @@ def plot_confusion_matrix(y_true,y_pred):
     
     
 
-train_dir = os.path.join('data/train') #change to ur own directory.
-test_dir = os.path.join('data/test') #change to ur own directory.
-valid_dir = os.path.join('data/valid') #change to ur own directory.
+train_dir = os.path.join('../dataset_ADT/train') #change to ur own directory.
+test_dir = os.path.join('../dataset_ADT/test') #change to ur own directory.
+valid_dir = os.path.join('../dataset_ADT/valid') #change to ur own directory.
 #using windows commans to set to the default path. --> Command prompt.
 
 train_generator, validation_generator, test_generator = image_gen_w_aug(train_dir, test_dir, valid_dir)
@@ -129,12 +139,23 @@ epochs=7,
 verbose=1,
 validation_data = validation_generator)
 
+Y_pred = model_TL.predict(validation_generator, 9)
+y_pred = np.argmax(Y_pred, axis=1)
+
+plot_confusion_matrix(confusion_matrix(validation_generator.classes, y_pred),['3','4','5'], normalize=True)
+
+print('')
+print('')
+print('')
+print('Confusion Matrix')
+print(confusion_matrix(validation_generator.classes, y_pred))
+
+
+print('Classification Report')
+print(metrics.classification_report(validation_generator.classes, y_pred))
 
 plot_hist(history_TL)
 
 
-tf.keras.models.save_model(model_TL,'Auntie-DOT_E0.hdf5') #will be save as this file
 
-
-#HALO LORE
-#Auntie DOT is UNSC's 'dumb' AI used by NOBLE team during the fall of REACH, it is one of the AI's used by ONI before the discovery of forerunner technology which enabled humanity to create 'smart' AI.
+tf.keras.models.save_model(model_TL,'ADT345.hdf5') #will be save as this file

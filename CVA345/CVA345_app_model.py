@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
-from sklearn.svm import SVC
 import itertools
 
 
@@ -106,9 +105,9 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     
     
 
-train_dir = os.path.join('assets/train') #change to ur own directory.
-test_dir = os.path.join('assets/test') #change to ur own directory.
-valid_dir = os.path.join('assets/valid') #change to ur own directory.
+train_dir = os.path.join('../dataset_CVA/train') #change to ur own directory.
+test_dir = os.path.join('../dataset_CVA/test') #change to ur own directory.
+valid_dir = os.path.join('../dataset_CVA/valid') #change to ur own directory.
 #using windows commans to set to the default path. --> Command prompt.
 
 train_generator, validation_generator, test_generator = image_gen_w_aug(train_dir, test_dir, valid_dir)
@@ -132,7 +131,7 @@ model_TL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['ac
 history_TL = model_TL.fit(
 train_generator,
 steps_per_epoch=10,
-epochs=8,
+epochs=20,
 verbose=1,
 validation_data = validation_generator)
 
@@ -158,5 +157,5 @@ print(metrics.classification_report(validation_generator.classes, y_pred))
 
 plot_hist(history_TL)
 
-tf.keras.models.save_model(model_TL,'CN345_CIVIA.hdf5') #will be save as this file
+tf.keras.models.save_model(model_TL,'CVA345.hdf5') #will be save as this file
 
