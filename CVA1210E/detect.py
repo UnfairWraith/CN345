@@ -26,7 +26,7 @@ def import_and_predict(image_data, model):
         
         return prediction
 
-model = tf.keras.models.load_model('CN345_CIVIA.hdf5')
+model = tf.keras.models.load_model('CVA1210E.hdf5')
 
     
 cap = cv2.VideoCapture(0)
@@ -50,11 +50,25 @@ while (True):
     #print(prediction)
 
     if np.argmax(prediction) == 0:
-        predict="Chinese Number 3"
+        st.write("Chinese hand gesture 1")
     elif np.argmax(prediction) == 1:
-        predict="Chinese Number 4"
+        st.write("Chinese hand gesture 2")
+    elif np.argmax(prediction) == 2:
+        st.write("Chinese hand gesture 3")
+    elif np.argmax(prediction) == 3:
+        st.write("Chinese hand gesture 4")
+    elif np.argmax(prediction) == 4:
+        st.write("Chinese hand gesture 5")
+    elif np.argmax(prediction) == 5:
+        st.write("Chinese hand gesture 6")
+    elif np.argmax(prediction) == 6:
+        st.write("Chinese hand gesture 7")
+    elif np.argmax(prediction) == 7:
+        st.write("Chinese hand gesture 8")
+    elif np.argmax(prediction) == 8:
+        st.write("Chinese hand gesture 9")   
     else:
-        predict="Chinese Number 5"
+        st.write("Chinese hand gesture 10")
     
     cv2.putText(original, predict, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
     cv2.imshow("Classification", original)
