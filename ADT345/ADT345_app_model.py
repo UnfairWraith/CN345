@@ -92,7 +92,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
    fmt = '.2f' if normalize else 'd'
    thresh = cm.max() / 2.
    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="white" if cm[i, j] > thresh else 'black')
+      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="black" if cm[i, j] > thresh else 'red')
  
    plt.tight_layout()
    plt.ylabel('True label')
@@ -135,15 +135,15 @@ model_TL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['ac
 history_TL = model_TL.fit(
 train_generator,
 steps_per_epoch=12,
-epochs=7,
+epochs=20,
 verbose=1,
 validation_data = validation_generator)
 
-Y_pred = model_TL.predict(validation_generator, 9)
+Y_pred = model_TL.predict(validation_generator)
 y_pred = np.argmax(Y_pred, axis=1)
 
 plot_confusion_matrix(confusion_matrix(validation_generator.classes, y_pred),['3','4','5'], normalize=True)
-
+plot_confusion_matrix(confusion_matrix(validation_generator.classes, y_pred),['3','4','5'], normalize=False)
 print('')
 print('')
 print('')

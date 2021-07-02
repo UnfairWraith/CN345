@@ -10,6 +10,9 @@ from sklearn.metrics import confusion_matrix
 import time
 import datetime
 from tensorflow import keras
+from sklearn import metrics
+import itertools
+
 from tensorflow.keras.preprocessing import image
 
 
@@ -119,25 +122,34 @@ def plot_hist(hist):
     plt.legend(["train", "validation"], loc="upper left")
     plt.show()
     
-def plot_confusion_matrix(y_true,y_pred):
-    cm_array = confusion_matrix(y_true,y_pred)
-    true_labels = np.unique(y_true)
-    pred_labels = np.unique(y_pred)
-    plt.imshow(cm_array[:-1,:-1], interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title("Confusion matrix", fontsize=16)
-    cbar = plt.colorbar(fraction=0.046, pad=0.04)
-    cbar.set_label('Number of images', rotation=270, labelpad=30, fontsize=12)
-    xtick_marks = np.arange(len(true_labels))
-    ytick_marks = np.arange(len(pred_labels))
-    plt.xticks(xtick_marks, true_labels, rotation=90)
-    plt.yticks(ytick_marks,pred_labels)
-    plt.tight_layout()
-    plt.ylabel('True label', fontsize=14)
-    plt.xlabel('Predicted label', fontsize=14)
-    fig_size = plt.rcParams["figure.figsize"]
-    fig_size[0] = 12
-    fig_size[1] = 12
-    plt.rcParams["figure.figsize"] = fig_size    
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+ 
+#Add Normalization Option
+   if normalize:
+     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+     print("Normalized confusion matrix")
+   else:
+     print('Confusion matrix, without normalization')
+ 
+# print(cm)
+ 
+   plt.imshow(cm, interpolation='nearest', cmap=cmap)
+   plt.title(title)
+   plt.colorbar()
+   tick_marks = np.arange(len(classes))
+   plt.xticks(tick_marks, classes, rotation=45)
+   plt.yticks(tick_marks, classes)
+ 
+   fmt = '.2f' if normalize else 'd'
+   thresh = cm.max() / 2.
+   for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="white" if cm[i, j] > thresh else 'black')
+ 
+   plt.tight_layout()
+   plt.ylabel('True label')
+   plt.xlabel('Predicted label') 
+   plt.show()
+     
     
     
 def finetune_model(model):
