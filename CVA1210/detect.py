@@ -26,7 +26,7 @@ def import_and_predict(image_data, model):
         
         return prediction
 
-model = tf.keras.models.load_model('CN345_CIVIA.hdf5')
+model = tf.keras.models.load_model('CVA1210.hdf5')
 
     
 cap = cv2.VideoCapture(0)
