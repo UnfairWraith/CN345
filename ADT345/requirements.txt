@@ -1,4 +1,4 @@
-1. Prequisites
+1. Prerequisites
 Please download and install Anaconda (Individual Edition) - 64-Bit Graphical Installer (with Python 3.X) before proceeding
 https://www.anaconda.com/products/individual
 
