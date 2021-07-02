@@ -30,7 +30,7 @@ def image_gen_w_aug(train_parent_directory, test_parent_directory, valid_parent_
     
     train_generator = train_datagen.flow_from_directory(train_parent_directory,
                                                        target_size = (75,75),
-                                                       batch_size = 102,
+                                                       batch_size = 132,
                                                        class_mode = 'categorical')
     
     val_generator = train_datagen.flow_from_directory(valid_parent_directory,
@@ -92,7 +92,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
    fmt = '.2f' if normalize else 'd'
    thresh = cm.max() / 2.
    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="white" if cm[i, j] > thresh else 'black')
+      plt.text(j, i, format(cm[i, j], fmt), horizontalalignment="center", color="pink" if cm[i, j] > thresh else 'red')
  
    plt.tight_layout()
    plt.ylabel('True label')
@@ -131,7 +131,7 @@ model_TL.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['ac
 history_TL = model_TL.fit(
 train_generator,
 steps_per_epoch=10,
-epochs=20,
+epochs=2,
 verbose=1,
 validation_data = validation_generator)
 
