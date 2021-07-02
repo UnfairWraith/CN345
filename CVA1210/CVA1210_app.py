@@ -17,7 +17,7 @@ def import_and_predict(image_data, model):
         
         return prediction
 
-model = tf.keras.models.load_model('CN345_CIVIA-TI.hdf5') #loading a trained model
+model = tf.keras.models.load_model('CVA1210.hdf5') #loading a trained model
 
 st.write("""
          # Chinese Number 3-4-5 Hand Sign Prediction
